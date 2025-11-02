@@ -1,8 +1,15 @@
 from flask import Flask, request, redirect, url_for, render_template
 import os
 from wisper import transcribe_audio
+import sqlite3
 
 app = Flask(__name__)
+
+def getConnection():
+    db_path = os.path.abspath("db.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 UPLOAD_FOLDER = "models"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -36,12 +43,18 @@ def add_model():
     return {"status": "success", "data": data}
 
 def insert_model_to_db(name, prompt_text, prompt_language, ref_audio_path, extra_refs):
-    print("Inserting model to database:")
-    print(f"Name: {name}")
-    print(f"Prompt Text: {prompt_text}")
-    print(f"Prompt Language: {prompt_language}")
-    print(f"Reference Audio Path: {ref_audio_path}")
-    print(f"Extra References: {extra_refs}")
+    connection = getConnection()
+    cursor = connection.cursor()
+
+    extra_refs_string = ", ".join(extra_refs)
+
+    cursor.execute('''
+    INSERT INTO models (name, ref_audio, prompt_text, prompt_language, extra_refs)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (name, prompt_text, prompt_language, ref_audio_path, extra_refs_string))
+
+    connection.commit()
+    cursor.close()
 
 def save_model_files(model_name, ref_audio, extra_refs_files, prompt_text=None, upload_folder="models"):
     model_folder = os.path.join(upload_folder, model_name.lower())
