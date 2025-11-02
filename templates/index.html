@@ -54,7 +54,12 @@
     </style>
   </head>
   <body>
-    <form action="/add_model" method="POST" enctype="multipart/form-data">
+    <form
+      id="addModelForm"
+      action="/add_model"
+      method="POST"
+      enctype="multipart/form-data"
+    >
       <h2>Add New Model</h2>
 
       <label for="name">Model Name</label>
@@ -101,6 +106,40 @@
       />
 
       <button type="submit">Add Model</button>
+
+      <!-- Loading icon -->
+      <div
+        id="loading"
+        style="display: none; text-align: center; margin-top: 10px"
+      >
+        <img
+          src="https://i.imgur.com/llF5iyg.gif"
+          alt="Loading..."
+          width="40"
+        />
+        <p>Processing... please wait</p>
+      </div>
     </form>
   </body>
+
+  <script>
+    const form = document.getElementById("addModelForm");
+    const loading = document.getElementById("loading");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loading.style.display = "block";
+
+      const formData = new FormData(form);
+
+      const response = await fetch("/add_model", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.text();
+      alert(result);
+      loading.style.display = "none";
+    });
+  </script>
 </html>

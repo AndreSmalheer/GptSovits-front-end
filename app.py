@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, url_for, render_template
 import os
+from wisper import transcribe_audio
 
 app = Flask(__name__)
 
@@ -33,17 +34,19 @@ def add_model():
       ref_audio.save(ref_audio_filename)
 
     extra_refs_folder = os.path.join(model_folder, "extra_refs")
-    os.makedirs(extra_refs_folder, exist_ok=True)
     
     # Save extra reference audios
     for i, f in enumerate(extra_refs):
-        if i == 0:
-            i = 1
+        i = 1 if i == 0 else i
         if f.filename:
+            os.makedirs(extra_refs_folder, exist_ok=True)
             f_path = os.path.join(extra_refs_folder, f"{name}_extra_ref_{i}_audio.wav")
             f.save(f_path)
 
-    # Here you can also trigger your model creation logic
+
+    if prompt_text is None or prompt_text.strip() == "":
+        prompt_text = transcribe_audio(ref_audio_filename)
+
     print("Model Name:", name)
     print("Prompt Text:", prompt_text)
     print("Prompt Language:", prompt_language)
