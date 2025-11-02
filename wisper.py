@@ -1,0 +1,12 @@
+import whisper
+
+def transcribe_audio(file_path):
+    model = whisper.load_model("base")
+    result = model.transcribe(file_path)
+    return result["text"]
+
+
+if __name__ == "__main__":
+    audio_file = r"C:\Users\Driek\Documents\Python_scripts\Projects\GptSovits-front-end\VO_Hu_Tao_Chat_-_Wangsheng_Funeral_Parlor.ogg"
+    transcription = transcribe_audio(audio_file)
+    print("Transcription:", transcription)
