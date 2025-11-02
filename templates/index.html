@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Model</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      form {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        width: 320px;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      input,
+      textarea,
+      select,
+      button {
+        width: 100%;
+        margin-top: 5px;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 15px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/add_model" method="POST" enctype="multipart/form-data">
+      <h2>Add New Model</h2>
+
+      <label for="name">Model Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Model name"
+        required
+      />
+
+      <label for="ref_audio">Reference Audio (.mp3)</label>
+      <input
+        type="file"
+        id="ref_audio"
+        name="ref_audio"
+        accept=".mp3"
+        required
+      />
+
+      <label for="prompt_text">Prompt Text</label>
+      <textarea
+        id="prompt_text"
+        name="prompt_text"
+        rows="3"
+        placeholder="prompt text for the reference audio"
+      ></textarea>
+
+      <label for="prompt_language">Prompt Language</label>
+      <select id="prompt_language" name="prompt_language">
+        <option value="en" selected>English</option>
+        <option value="nl">Dutch</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+      </select>
+
+      <label for="extra_refs">Extra Reference Audio (.mp3)</label>
+      <input
+        type="file"
+        id="extra_refs"
+        name="extra_refs"
+        accept=".mp3"
+        multiple
+      />
+
+      <button type="submit">Add Model</button>
+    </form>
+  </body>
+</html>
